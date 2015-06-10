@@ -67,3 +67,45 @@
 ### Git Aliases
 * For the hunt-n-peckers, when 8 characters is just too many, use an alias...
 * However, can be useful to simplify commands (i.e. `git config --global alias.rollback 'reset --soft HEAD~1'`).
+
+## Chapter 3 - Git Branching
+
+### Branches in a Nutshell
+* Staging a file results in the creation of a blob in git (a version of a file in the git repo).  A commit (snapshot) consists of a hash of the root directory's blobs and recursive hashes from sub-directories and their blobs.
+* Each commit points to one or more parent commits.  This creates a DAG.  A branch is simply a pointer to a commit (node) on the DAG.
+* Switching branches involves traversing the dag and applying updates to the blobs specified by each commit.
+* This switch will leave local workspace modifications alone.  If a blob change collides with local modifications, git will will not switch.
+
+### Basic Branching and Merging
+* Use `git checkout -b <branch>` to create and checkout a new branch from current branch/position (fast as it doesn't modify local workspace).
+* Use `git merge <topic>` to update the current branch with commits from another branch.
+* *fast-forward* indicates no merge-commits were made.  Essentially, your branch now just points to the same commit/snapshot as the topic branch.
+* *merge-commits* bring two branches together.  It creates a new commit/snapshot with two parents (one being the previous commit of the active branch and the other being the commit currently pointed to by the topic branch). 
+* `git branch -d <topic>` will delete the topic branch.  However, if you haven't merged that branch back into the master or another branch, this call may fail.
+* `git branch -D <topic>` forces the delete and should always succeed (as long as the topic branch exists).
+* A *merge-conflict* occurs when two branches modified the same file (and specifically the same lines in the file).
+* To help resolve a *merge-conflict*, git will update the file to contain the changes from both branches.  The user is then expected to manually merge the changes.
+* Use `git branch` to list the local branches in the repository. `*` will indicate the active branch.
+* `git branch -v` shows some info of the current commit/snapshot for each branch (i.e. hash and comment).
+
+### Branching Worflows
+* Long-Running vs. Experimental Branches...
+
+### Remote Branches
+* `git fetch <remote>` updates the local repository's *remote-tracking branches*.  These *remote-tracking branches* are pointers to commit/snapshots (just like ordinary branches).  Unlike, ordinary branches, you cannot update what they point to directly.
+* In order to 'play' with changes made in these remote branches, you need to merge them into a local branch (ala `git merge <remote>/<topic>`).
+* `git checkout -b <topic> <remote>/<topic>` will create a local *tracking-branch* that will allow you to automatically update it with `git pull <remote> <branch>` .
+* *master* is usually created as a tracking branch by default when cloning a remote repository.
+* `git push <remote> <branch>` creates or updates the commit/snapshot pointed to by *branch* on the *remote* server.
+* *@{u}* (relative to a tracking branch) is shorthand for *<remote>/<branch>*.
+* `git config --global credential.helper cache` will keep credentials in memory for up to 15 minutes by default.
+* `git pull` is basically equivalent to `git fetch <remote> <branch>; git merge <remote>/<branch>`.
+* Book recommends using *fetch* and *merge* rather than *pull*.
+
+### Rebasing
+* All your base belong to us.
+* 'git rebase master' will go to the first common ancestor of both *master* and the active branch.  The rebase will rewrite all new/added commits on top of the latest master.  This avoids *merge-commits*.
+* Allows for cleaner merging later down the line.  Topic deviation to be grouped on 'top' of master commits.  These can be *squashed* to a single commit for even simpler merging/history.
+* `--onto` allows rebasing from a descendant to some base branch (excluding changes from child/parent in between.
+* **Golden Rule of Rebasing** Do not rebase "public" commits that exist in other repository.  (Only use on private commits).  Rebases re-write the commits.  This will ruin compatibility/integration with others.
+* `git pull --rebase` performs a *fetch* and *rebase* rather a *fetch* and *merge*.
