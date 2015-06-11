@@ -46,7 +46,7 @@
 
 ### Viewing the Commit History
 * Use `git log` to view repository history.
-* Alternatively, `git log -- <file>' will show only commits related the specified file(s).
+* Alternatively, `git log -- <file>` will show only commits related the specified file(s).
 * Options like `--stat` and `-p` provide additional information about the commits.
 * Options like `--author="Myself"` and `--grep`. `-S` shows changes with lines containing a specific string.  `git log --committer="Scheier" -S Welcome` shows all commits made by Yours Truly that contained a line added/modified/removed containing 'Welcome'.
 
@@ -54,7 +54,7 @@
 * Use `git commit --amend` if you forgot to comment a file or part of a file.
 * `git reset` demotes a file from the staging area.  This does not modify the local workspace.
 * `git reset --soft HEAD~1` will undo your last commit with the previous commit update in the staging area.
-* `git checkout -- file` will "undo" the local you have made.
+* `git checkout -- <file>` will "undo" the local change you have made.
 
 ### Working with Remotes
 * `git remote -v` lists information about the configured remote repositories.  These can be a central server or other users.
