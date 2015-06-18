@@ -1,6 +1,8 @@
 Two roads diverged in a yellow wood,
 And sorry I could not travel both
 
+To where it bent in the undergrowth;
+
 Had worn them really about the same,
 And both that morning equally lay
 
