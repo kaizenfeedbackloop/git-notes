@@ -4,3 +4,4 @@ Scott Donelan (scott.donelan@daktronics.com) - Hello
 Brad Borden (brad.borden@daktronics.com) - Git r done!
 Adam Bakker (adam.bakker@daktronics.com) - Having fun with Git
 Greg Wessels (greg.wessels@daktronics.com) - Wishing I could be like the cool kids
+Scott Kool (scott.kool@daktronics.com) - Never has any witty comments to make
