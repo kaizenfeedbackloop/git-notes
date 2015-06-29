@@ -1,9 +1,7 @@
 Two roads diverged in a yellow wood,
 And sorry I could not travel both
-
 And be one traveler, long I stood
 And looked down one as far as I could
-
 To where it bent in the undergrowth;
 
 Because it was grassy and wanted wear;
@@ -14,5 +12,7 @@ And both that morning equally lay
 In leaves no step had trodden black.
 Oh, I kept the first for another day!
 
+Somewhere ages and ages hence:
+Two roads diverged in a wood, and I—
 I took the one less traveled by,
 And that has made all the difference.
