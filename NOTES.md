@@ -133,7 +133,7 @@
 * `2` or `u` (*update*) - This prompt allows you to select what files you'd like to modify (in this case add).  Afterwards, the selected files will be indicated by an asterisk.  Hitting *<enter>* with no additional selections, will confim/exit the update.
 * `3` or `r` (*revert*) - This will all you to unselect staging selections you've made with update.
 * `5` or `p` (*patch*) - Allows you select *hunks* to stage rather than the whole file.  Again, select files via their number.  However, once you hit *<enter>* with no additional selections, it does not take you back to the main menu right away.  Rather, you will be taken through hunk-by-hung of the selected files to determine whether or not to stage it.  In addition to simple staging options, you can further breakdown hunks into smaller hunks.
-`Stage this hunk [y,n,a,d,/,j,J,g,e,?]? ?
+<pre><code>Stage this hunk [y,n,a,d,/,j,J,g,e,?]? ?
 y - stage this hunk
 n - do not stage this hunk
 a - stage this and all the remaining hunks in the file
@@ -146,5 +146,37 @@ k - leave this hunk undecided, see previous undecided hunk
 K - leave this hunk undecided, see previous hunk
 s - split the current hunk into smaller hunks
 e - manually edit the current hunk
-? - print help`
+? - print help</code></pre>
 * `add`, `stash save`, `checkout`, and `reset` all have `--patch` options.
+
+### Stashing and Cleaning
+* The stash is useful for temporarily removing (or stashing) workspace modifications (whether a bunch of debugging statements or incomplete work).  This is a useful alternative to an actual commit (i.e. doesn't compile or for debugging).
+* `git stash` or `git stash save` push all workspace modifications onto the stash.  This includes any staged files.  Untracked files will not be stashed by default.
+* `--include-untracked` or `-u` will tell git to stash untracked files.
+* `--keep-index` will only stash unstaged changes.
+* `--index` will tell git to try and re-stage appropriately when applying a stash.
+* `git stash list` shows the current stash stack.
+* `git stash apply <stash@{n}>` re-applies the specified stash to your workspace.  If no stash is explicitly specified, git will apply the top.
+* `git stash drop <stash@{n}>` removes the specified stash from the stack.  If no stash is explicitly specified, git will apply the top.
+* `git stash pop <stash@{n}>` re-applies the specified stash and then drops it.  If no stash is specified, it will apply and drop the top.
+* `--patch` will allow you to interactively choose what to stash.
+* `git stash branch <topic> <stash@{n}>` allows you to create a branch from the specified stash.
+* `git clean -f` will forcibly remove all untracked files.
+* `git clean -n` performs a dry run and lists files that would be removed.
+* `git clean -f -d` will remove all untracked files and directories.
+* `git clean -f -x` will look for ignored files too.
+* `git clean -f -i` will perform an interactive clean.
+
+### Searching
+* `git grep <keyword>` searches files for a keyword.  `-n` specifies that the line number should be included in the result.
+* `git grep -e <regex> <commit>` searches the specified commit (i.e. label, branch, commit id) for occurences of the provided expression.
+* `--and` provides a convenient way to combine multiple expressions.
+* `--break` and `--heading` provides some organization to the results.
+* `git log -S<string>` displays all commits that modified a line containing *string*.
+* `git log -G<regex>` displays all commits that modified a line matching the given expression.
+* `git log -L<regex_begin>,<regex_end>,<file>` allows you to log the history for a range of lines in a file.  For example, `git log -L '/Two roads/','/all the difference/':decisions.txt` will show all the changes in *decisions.txt* between the first line containing *Two roads* and the first following line containing *all the difference*.
+
+### Rewriting History
+* `git commit --amend` allows you to modify your staging area to add/remove from your previous commit.  Like a rebase, do not do this operation after making changes public.
+* `git merge --squash` will merge in a topic branch as a single commit.
+* `git rebase -i` lets you do all sorts of crazy stuff.
