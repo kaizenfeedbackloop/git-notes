@@ -109,3 +109,42 @@
 * `--onto` allows rebasing from a descendant to some base branch (excluding changes from child/parent in between.
 * **Golden Rule of Rebasing** Do not rebase "public" commits that exist in other repository.  (Only use on private commits).  Rebases re-write the commits.  This will ruin compatibility/integration with others.
 * `git pull --rebase` performs a *fetch* and *rebase* rather a *fetch* and *merge*.
+
+## Chapter 5 - Distributed Git
+
+## Chapter 7 - Git Tools
+
+### Revision Selection
+* Refer to a given revision in history by it's SHA-1 hash.  This doesn't have to be the entire hash, just enough to be unambiguious.  The initial checkin has a hash of '1b4142e75518a819d1c668436a2558c7194229e5'.  However, at the time of this writing, simply using '1b41' is enough to unabiguously reference this commit.
+* A branch is really just pointer to some commit.  You can checkout a specific commit by `git checkout <hash>`.  This puts your workspace into a *detached HEAD* state (i.e. it won't be advancing some branch reference).
+* `git rev-parse <topic>` will print the SHA-1 hash for the commited pointed to by *topic*.
+* Git maintains a *reflog*, a log of what your HEAD and branch references pointed two over the last couple months.  You can view this with `git reflog`.  The *reflog* is invaluable when repairing damage done from a poorly performed rebase...
+* Reflog is purely a local history.  `git reflog HEAD@{3.weeks.ago}` shows the changes to HEAD 3 weeks ago... Kind of cool.
+* Commits in the *ancestry* can be referenced relatively using *^*.  `git show HEAD^` will show the previous commit where `HEAD^^` will show the "uber" previous commit (i.e. grandparent). `HEAD~2` is equivalent to `HEAD^^`.  This comes in handy when comparing the current state to the previous commit (i.e. `git diff HEAD^ -- NOTES.md`).
+* *double dot* syntax allows you to specify a difference of commits.  `git log master..topic` will show all commits that are in topic, but not master.  Whereas `git log topic..master` will show all commits that are in master, but not topic.
+* Git provides *not* syntax as well.  Either with the attribute *--not* or with a *^* before the reference.  `git log master ^review` and `git log master --not review` are equivalent to `git log review..master`.
+* *triple dot* syntax is an **xor** operator between two branches.
+
+### Interactive Staging
+* Somtimes it is nice to clean as you go.  Let's say you are in the middle of enhancing a function.  While do this, you notice that there are a few inconsistent curly brackets.  Do you modify them right away, or wait until your function enhancements are done?  With interactive staging, you can separate changes made to the same file.
+* `git add -i` will enter the interactive staging mode (note that interactive mode can be used in other places like rebase/merge).
+* Initially, you will be presented with the `What now>` prompt.  Where there are several options.
+* `u` (*update*) - This prompt allows you to select what files you'd like to modify (in this case add).  Afterwards, the selected files will be indicated by an asterisk.  Hitting *<enter>* with no additional selections, will confim/exit the update.
+* `2` or `u` (*update*) - This prompt allows you to select what files you'd like to modify (in this case add).  Afterwards, the selected files will be indicated by an asterisk.  Hitting *<enter>* with no additional selections, will confim/exit the update.
+* `3` or `r` (*revert*) - This will all you to unselect staging selections you've made with update.
+* `5` or `p` (*patch*) - Allows you select *hunks* to stage rather than the whole file.  Again, select files via their number.  However, once you hit *<enter>* with no additional selections, it does not take you back to the main menu right away.  Rather, you will be taken through hunk-by-hung of the selected files to determine whether or not to stage it.  In addition to simple staging options, you can further breakdown hunks into smaller hunks.
+`Stage this hunk [y,n,a,d,/,j,J,g,e,?]? ?
+y - stage this hunk
+n - do not stage this hunk
+a - stage this and all the remaining hunks in the file
+d - do not stage this hunk nor any of the remaining hunks in the file
+g - select a hunk to go to
+/ - search for a hunk matching the given regex
+j - leave this hunk undecided, see next undecided hunk
+J - leave this hunk undecided, see next hunk
+k - leave this hunk undecided, see previous undecided hunk
+K - leave this hunk undecided, see previous hunk
+s - split the current hunk into smaller hunks
+e - manually edit the current hunk
+? - print help`
+* `add`, `stash save`, `checkout`, and `reset` all have `--patch` options.
